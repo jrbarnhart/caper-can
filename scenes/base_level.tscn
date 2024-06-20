@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://c7jh4ha1aosvi"]
+[gd_scene load_steps=6 format=3 uid="uid://c7jh4ha1aosvi"]
 
 [ext_resource type="Texture2D" uid="uid://g2u0ovhci72v" path="res://assets/tilesetTemplateDense.png" id="1_l7siv"]
 [ext_resource type="PackedScene" uid="uid://briv40xl4hxoi" path="res://scenes/can.tscn" id="2_6k08o"]
+[ext_resource type="Script" path="res://scripts/ChargeMeter.gd" id="3_p2vp8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t8cet"]
 texture = ExtResource("1_l7siv")
@@ -511,3 +512,21 @@ layer_0/tile_data = PackedInt32Array(393216, 65536, 0, 393217, 65536, 0, 393218,
 
 [node name="Can" parent="." instance=ExtResource("2_6k08o")]
 position = Vector2(146, 305)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ChargeMeterUI" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ChargeMeter" type="ProgressBar" parent="CanvasLayer/ChargeMeterUI"]
+layout_mode = 0
+offset_left = 860.0
+offset_top = 800.0
+offset_right = 1060.0
+offset_bottom = 830.0
+script = ExtResource("3_p2vp8")
+
+[connection signal="update_charge_meter" from="Can" to="CanvasLayer/ChargeMeterUI/ChargeMeter" method="_on_can_update_charge_meter"]

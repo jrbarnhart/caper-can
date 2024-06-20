@@ -1,5 +1,7 @@
 extends RigidBody2D
 
+signal update_charge_meter(value)
+
 @onready var animated_sprite_2d = $AnimatedSprite2D
 
 const FRAME_COUNT = 8
@@ -31,6 +33,9 @@ func _process(delta):
 	# Reset charge_time if neither shot is being charged
 	if not is_charging_left and not is_charging_right:
 		charge_time = 0.0
+		
+	#Emit signal for charge meter
+	emit_signal("update_charge_meter", (charge_time / MAX_CHARGE_TIME) * 100)
 
 	var angle_degrees = rotation_degrees
 	angle_degrees = wrapf(angle_degrees - OFFSET_DEGREES, 0, 360)
