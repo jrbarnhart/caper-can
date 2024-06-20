@@ -1,7 +1,14 @@
-[gd_scene load_steps=14 format=3 uid="uid://briv40xl4hxoi"]
+[gd_scene load_steps=21 format=3 uid="uid://briv40xl4hxoi"]
 
 [ext_resource type="Script" path="res://scripts/can.gd" id="1_4w0g4"]
 [ext_resource type="Texture2D" uid="uid://cr1iad8s0nb7q" path="res://assets/canDense.png" id="1_ac1ah"]
+[ext_resource type="AudioStream" uid="uid://dbqhvy11nxxco" path="res://assets/SFX/cock.wav" id="3_80406"]
+[ext_resource type="AudioStream" uid="uid://0y75k7squced" path="res://assets/SFX/click.wav" id="3_pvrqg"]
+[ext_resource type="AudioStream" uid="uid://c7c2ommki64ao" path="res://assets/SFX/ping1.wav" id="4_w3mru"]
+[ext_resource type="AudioStream" uid="uid://cm6uwbydjs32g" path="res://assets/SFX/ping2.wav" id="5_2v6n7"]
+[ext_resource type="AudioStream" uid="uid://cqqka3gm5ulnv" path="res://assets/SFX/ping3.wav" id="6_sbppr"]
+[ext_resource type="AudioStream" uid="uid://3ul8g4rj4y6q" path="res://assets/SFX/ping4.wav" id="7_a5l8d"]
+[ext_resource type="AudioStream" uid="uid://33camcgg0b6c" path="res://assets/SFX/spin.wav" id="8_ti7g2"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_h1uiv"]
 bounce = 0.2
@@ -95,3 +102,26 @@ update_rotation = false
 process_callback = 0
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
+
+[node name="SFX" type="Node" parent="."]
+
+[node name="Click" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("3_pvrqg")
+
+[node name="Cock" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("3_80406")
+
+[node name="Ping1" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("4_w3mru")
+
+[node name="Ping2" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("5_2v6n7")
+
+[node name="Ping3" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("6_sbppr")
+
+[node name="Ping4" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("7_a5l8d")
+
+[node name="Spin" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("8_ti7g2")

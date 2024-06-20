@@ -3,6 +3,15 @@ extends RigidBody2D
 signal update_charge_meter(value)
 
 @onready var animated_sprite_2d = $AnimatedSprite2D
+@onready var click = $SFX/Click
+@onready var cock = $SFX/Cock
+@onready var ping_1 = $SFX/Ping1
+@onready var ping_2 = $SFX/Ping2
+@onready var ping_3 = $SFX/Ping3
+@onready var ping_4 = $SFX/Ping4
+@onready var spin = $SFX/Spin
+
+@onready var ping_sounds = [ping_1, ping_2, ping_3, ping_4]
 
 const FRAME_COUNT = 8
 const OFFSET_DEGREES = 337.5
@@ -18,8 +27,12 @@ var is_charging_right = false
 var left_shot_released = false
 var right_shot_released = false
 
+var ammoCount = 6
+
 func _process(delta):
 	if Input.is_action_pressed("left_shot"):
+		if is_charging_left == false:
+			cock.play()
 		is_charging_left = true
 		charge_time += delta
 	elif Input.is_action_just_released("left_shot"):
@@ -27,12 +40,17 @@ func _process(delta):
 		left_shot_released = true
 
 	if Input.is_action_pressed("right_shot"):
+		if is_charging_right == false:
+			cock.play()
 		is_charging_right = true
 		charge_time += delta
 	elif Input.is_action_just_released("right_shot"):
 		is_charging_right = false
 		right_shot_released = true
 
+	if Input.is_action_just_pressed("reload"):
+		spin.play()
+		ammoCount = 6
 		
 	#Emit signal for charge meter
 	emit_signal("update_charge_meter", (charge_time / MAX_CHARGE_TIME) * 100)
@@ -47,6 +65,7 @@ func _integrate_forces(state):
 		print("Left")
 		apply_charged_shot(state, Vector2(-SHOT_POWER_X, SHOT_POWER_Y), -5000.0)
 		left_shot_released = false
+		
 	elif right_shot_released:
 		print("Right")
 		apply_charged_shot(state, Vector2(SHOT_POWER_X, SHOT_POWER_Y), 5000.0)
@@ -68,8 +87,18 @@ func apply_charged_shot(state, impulse_vector, torque_impulse):
 	var final_impulse_vector = impulse_vector * (1.0 + charge_ratio * (CHARGE_MULTIPLIER - 1.0))
 	var final_torque_impulse = torque_impulse * (1.0 + charge_ratio * (CHARGE_MULTIPLIER - 1.0))
 
-	state.linear_velocity = Vector2.ZERO
-	state.apply_impulse(final_impulse_vector)
-	state.apply_torque_impulse(final_torque_impulse)
+	if ammoCount > 0:
+		state.linear_velocity = Vector2.ZERO
+		state.apply_impulse(final_impulse_vector)
+		state.apply_torque_impulse(final_torque_impulse)
+		ammoCount -= 1
+		play_random_ping()
+	else:
+		print("click")
+		click.play()
 
 	charge_time = 0.0  # Reset charge time after shot
+
+func play_random_ping():
+	var random_index = randi() % ping_sounds.size()
+	ping_sounds[random_index].play()
