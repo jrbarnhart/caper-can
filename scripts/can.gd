@@ -7,9 +7,10 @@ signal update_charge_meter(value)
 const FRAME_COUNT = 8
 const OFFSET_DEGREES = 337.5
 const MAX_CHARGE_TIME = 1.0  # Max time to charge the shot
-const CHARGE_MULTIPLIER = 2.0  # Multiplier for fully charged shots
-const SHOT_POWER_X = 300.0
+const CHARGE_MULTIPLIER = 2.5  # Multiplier for fully charged shots
+const SHOT_POWER_X = 250.0
 const SHOT_POWER_Y = -500.0
+const MAX_VELOCITY_Y = 500.0
 
 var charge_time = 0.0
 var is_charging_left = false
@@ -50,6 +51,17 @@ func _integrate_forces(state):
 		print("Right")
 		apply_charged_shot(state, Vector2(SHOT_POWER_X, SHOT_POWER_Y), 5000.0)
 		right_shot_released = false
+		
+func apply_stopping_shot(state):
+	var final_impulse_y = 0
+	if state.linear_velocity.y > MAX_VELOCITY_Y:
+		final_impulse_y = 0
+	else:
+		var velocity_difference = MAX_VELOCITY_Y - state.linear_velocity.y
+		final_impulse_y = SHOT_POWER_Y * (velocity_difference / MAX_VELOCITY_Y)
+	state.apply_impulse(Vector2(-state.linear_velocity.x, final_impulse_y))
+	charge_time = 0.0
+
 
 func apply_charged_shot(state, impulse_vector, torque_impulse):
 	var charge_ratio = min(charge_time / MAX_CHARGE_TIME, 1.0)

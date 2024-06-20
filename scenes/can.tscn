@@ -1,7 +1,13 @@
-[gd_scene load_steps=13 format=3 uid="uid://briv40xl4hxoi"]
+[gd_scene load_steps=14 format=3 uid="uid://briv40xl4hxoi"]
 
 [ext_resource type="Script" path="res://scripts/can.gd" id="1_4w0g4"]
 [ext_resource type="Texture2D" uid="uid://cr1iad8s0nb7q" path="res://assets/canDense.png" id="1_ac1ah"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_h1uiv"]
+bounce = 0.2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w5w6n"]
+size = Vector2(32, 70)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ye4jd"]
 atlas = ExtResource("1_ac1ah")
@@ -67,20 +73,19 @@ animations = [{
 "speed": 0.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_w5w6n"]
-size = Vector2(32, 70)
-
 [node name="Can" type="RigidBody2D"]
+physics_material_override = SubResource("PhysicsMaterial_h1uiv")
 can_sleep = false
+continuous_cd = 1
 script = ExtResource("1_4w0g4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_w5w6n")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 top_level = true
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_x1wxd")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_w5w6n")
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
 remote_path = NodePath("../AnimatedSprite2D")
