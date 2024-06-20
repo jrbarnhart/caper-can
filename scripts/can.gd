@@ -7,7 +7,9 @@ signal update_charge_meter(value)
 const FRAME_COUNT = 8
 const OFFSET_DEGREES = 337.5
 const MAX_CHARGE_TIME = 1.0  # Max time to charge the shot
-const CHARGE_MULTIPLIER = 3.0  # Multiplier for fully charged shots
+const CHARGE_MULTIPLIER = 2.0  # Multiplier for fully charged shots
+const SHOT_POWER_X = 300.0
+const SHOT_POWER_Y = -500.0
 
 var charge_time = 0.0
 var is_charging_left = false
@@ -30,9 +32,6 @@ func _process(delta):
 		is_charging_right = false
 		right_shot_released = true
 
-	# Reset charge_time if neither shot is being charged
-	if not is_charging_left and not is_charging_right:
-		charge_time = 0.0
 		
 	#Emit signal for charge meter
 	emit_signal("update_charge_meter", (charge_time / MAX_CHARGE_TIME) * 100)
@@ -45,11 +44,11 @@ func _process(delta):
 func _integrate_forces(state):
 	if left_shot_released:
 		print("Left")
-		apply_charged_shot(state, Vector2(-500, -500), -5000.0)
+		apply_charged_shot(state, Vector2(-SHOT_POWER_X, SHOT_POWER_Y), -5000.0)
 		left_shot_released = false
 	elif right_shot_released:
 		print("Right")
-		apply_charged_shot(state, Vector2(500, -500), 5000.0)
+		apply_charged_shot(state, Vector2(SHOT_POWER_X, SHOT_POWER_Y), 5000.0)
 		right_shot_released = false
 
 func apply_charged_shot(state, impulse_vector, torque_impulse):
